@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+import { AgGridReact } from 'ag-grid-react';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
@@ -10,6 +11,8 @@ import Editcar from './Editcar';
 
 function Carlist() {
     const [cars, setCars] = useState([]);
+    const [gridApi, setGridApi] = useState(null);
+    const [gridColumnApi, setGridColumnApi] = useState(null);
     const gridOptions = [
         { suppressSizeToFit: true },
         { sizeColumnsToFit: true }
@@ -40,6 +43,11 @@ function Carlist() {
             }
         },
     ]
+
+    const onGridReady = (params) => {
+        setGridApi(params.api);
+        setGridColumnApi(params.columnApi);
+    }
 
     const fetchData = () => {
         fetch('https://carstockrest.herokuapp.com/cars')
@@ -78,16 +86,15 @@ function Carlist() {
     return (
         <div style={{ agCell: { display: 'flex', alignItems: 'center' } }}>
             <Addcar saveCar={saveCar} />
+            <TextField label="Search..." variant="outlined" onChange={(e) => gridApi.setQuickFilter(e.target.value)} />
             <div className="ag-theme-material" style={{ marginTop: 20, height: 600, margin: 'auto' }}>
                 <AgGridReact
                     rowData={cars}
                     columnDefs={columns}
                     pagination="true"
                     paginationPageSize="10"
-                    gridOptions={gridOptions}>
-                    <AgGridColumn field="brand"></AgGridColumn>
-                    <AgGridColumn field="model"></AgGridColumn>
-                    <AgGridColumn field="price"></AgGridColumn>
+                    gridOptions={gridOptions}
+                    onGridReady={onGridReady}>
                 </AgGridReact>
             </div>
         </div>

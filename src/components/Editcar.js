@@ -42,14 +42,14 @@ export default function Editcar(props) {
 
     return (
         <div>
-            <Button variant="contained" variant="outlined" color="primary" onClick={handleClickOpen}>
+            <Button variant="contained" color="primary" onClick={handleClickOpen}>
                 Edit
             </Button>
             <Dialog open={open} onClose={handleClickClose}>
-                <DialogTitle>New car</DialogTitle>
+                <DialogTitle>Editing car - {car.brand}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Creates a new car to the database
+                        Lets you modify an existing car
                     </DialogContentText>
                     <TextField
                         autoFocus
